@@ -34,7 +34,7 @@ class ExportDialog(QtWidgets.QDialog):
                 self.use_selection = False
                 QtWidgets.QMessageBox.information(self,
                                            "Export",
-                                           "Export has been reset to a scene")
+                                           "Exporting Entire Scene...")
             
                 
     def start(self):
