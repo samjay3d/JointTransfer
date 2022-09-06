@@ -7,6 +7,9 @@ import maya.cmds as cmds
 
 @dataclass
 class JointData:
+    """
+    The abstraction layer for maya joints 
+    """
     name: str
     _index_order : str = None
     _world_position : List[float] = None
@@ -95,7 +98,7 @@ class JointData:
         """
         Recursively search the JointData and collect all parents and children
         """
-        joints = [self]
+        joints = [self] # add root to list
         if self.parent:
             self._get_all_parents(self.parent, joints)
         if self.children:
@@ -105,7 +108,7 @@ class JointData:
     @classmethod
     def from_dict(cls, jnt_dict: dict, parent=None) -> JointData:
         """
-        Applies Dictionary to Joint data
+        Creates python representation of joint data from a dictionary
         """
         children_jnt = []
         for k, v in jnt_dict.items():
@@ -114,13 +117,16 @@ class JointData:
             jnt.index_order = v.get('index_order')
             jnt.world_position = v.get('world_position')
             jnt.orientation = v.get('orientation')
+
             if v.get('children'):
                 children = cls.from_dict(v.get('children'), parent=jnt)
                 jnt.children = children
+
             if jnt.parent is None:
                 return jnt # end the loop and return the top node 
             else:
                 children_jnt.append(jnt)
+
         return children_jnt # return the children to add to the top node
 
     def _find_item(self, obj, key):
@@ -136,7 +142,7 @@ class JointData:
         jnt_dict = {}
         for j in jnts:
             if j.parent:
-                relative_dict = self._find_item(jnt_dict, j.parent.name)
+                relative_dict = self._find_item(jnt_dict, j.parent.name) 
                 parent_dict = relative_dict[j.parent.name]
                 if 'children' not in parent_dict.keys():
                     parent_dict['children'] = {}
@@ -155,15 +161,15 @@ class JointData:
                 }
         return jnt_dict
 
-    def _check_exists(self, name):
+    def _check_exists(self, name: str) -> str:
         """
-        Check if object already exists and update name if it does.
+        Check if object already exists and returns a new name if it does.
         """
         if cmds.objExists(name):
             return self._check_exists(name + '_dup')
         return name
 
-    def _create_joint(self, j):
+    def _create_joint(self, j: JointData):
         j.name = self._check_exists(j.name)
         cmds.select(d=True)
         cmds.joint(n=j.name, roo=j.index_order, 

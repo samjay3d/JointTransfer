@@ -17,12 +17,12 @@ def import_dialog():
     try:
         joint_transfer.ui.import_dialog.import_scene()
     except:
-        print(traceback.format_exc())
+        print(traceback.format_exc(), file=sys.stderr)
 def export_dialog():
     try:
         joint_transfer.ui.export_dialog.export_scene()
     except:
-        print(traceback.format_exc())
+        print(traceback.format_exc(), file=sys.stderr)
 
 def command_scene_handler(file_path, type, use_selection=False):
     try:
@@ -32,7 +32,7 @@ def command_scene_handler(file_path, type, use_selection=False):
         if type in 'export':
             handler.export_scene()
     except:
-        print(traceback.format_exc())
+        print(traceback.format_exc(), file=sys.stderr)
     
 class JointImport(om.MPxCommand):
     kPluginCmdName = "jointImport"
