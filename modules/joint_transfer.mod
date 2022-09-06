@@ -4,3 +4,4 @@ icons: ./joint_transfer/maya/icons
 scripts: ./joint_transfer/maya/scripts
 PYTHONPATH  +:= joint_transfer/python
 PYTHONPATH  +:= joint_transfer/python/bin
+MAYA_PLUG_IN_PATH +:= joint_transfer/python/bin/maya/plugin
