@@ -1,4 +1,4 @@
-global proc shelf_JointTransfer () {
+global proc shelf_Joint_Transfer () {
     global string $gBuffStr;
     global string $gBuffStr0;
     global string $gBuffStr1;
@@ -6,20 +6,20 @@ global proc shelf_JointTransfer () {
 
     shelfButton
         -enableCommandRepeat 1
-        -flexibleWidthType 3
+        -flexibleWidthType 2
         -flexibleWidthValue 32
         -enable 1
-        -width 35
+        -width 32
         -height 34
         -manage 1
         -visible 1
         -preventOverride 0
-        -annotation "Imports Joint Data from JSON File Exported out" 
+        -annotation "Imports Joint Data into scene from file." 
         -enableBackground 0
         -backgroundColor 0 0 0 
         -highlightColor 0.321569 0.521569 0.65098 
         -align "center" 
-        -label "Import Joint Data from Json File" 
+        -label "Import Joint Data" 
         -labelOffset 0
         -rotation 0
         -flipX 0
@@ -27,23 +27,23 @@ global proc shelf_JointTransfer () {
         -useAlpha 1
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
-        -overlayLabelBackColor 0 0 0 0.5 
-        -image "import_joints_icon.png" 
-        -image1 "import_joints_icon.png" 
+        -overlayLabelBackColor 0 0 0 0 
+        -image "icon_import-01.svg" 
+        -image1 "icon_import-01.svg" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
-        -command "from joint_transfer import import_scene_data\nimport_scene_data.Import().execute()" 
+        -command "cmds.loadPlugin('jointTransfer.py')\ncmds.jointImport()" 
         -sourceType "python" 
         -commandRepeatable 1
         -flat 1
     ;
     shelfButton
         -enableCommandRepeat 1
-        -flexibleWidthType 3
+        -flexibleWidthType 1
         -flexibleWidthValue 32
         -enable 1
-        -width 35
+        -width 34
         -height 34
         -manage 1
         -visible 1
@@ -53,7 +53,7 @@ global proc shelf_JointTransfer () {
         -backgroundColor 0 0 0 
         -highlightColor 0.321569 0.521569 0.65098 
         -align "center" 
-        -label "Export Joint Data to Json File" 
+        -label "Export Joint Data" 
         -labelOffset 0
         -rotation 0
         -flipX 0
@@ -62,12 +62,12 @@ global proc shelf_JointTransfer () {
         -font "plainLabelFont" 
         -overlayLabelColor 0.8 0.8 0.8 
         -overlayLabelBackColor 0 0 0 0.5 
-        -image "export_joints_icon.png" 
-        -image1 "export_joints_icon.png" 
+        -image "icon_export-01.svg" 
+        -image1 "icon_export-01.svg" 
         -style "iconOnly" 
         -marginWidth 1
         -marginHeight 1
-        -command "from joint_" 
+        -command "cmds.loadPlugin('jointTransfer.py')\ncmds.jointExport()" 
         -sourceType "python" 
         -commandRepeatable 1
         -flat 1
