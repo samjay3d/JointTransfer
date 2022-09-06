@@ -1,5 +1,6 @@
 from __future__ import annotations
 from dataclasses import dataclass
+from pprint import pprint
 from typing import List
 import maya.cmds as cmds
 
@@ -46,6 +47,8 @@ class JointData:
     @property
     def children(self):
         if self._children is None:
+            if not cmds.objExists(self.name):
+                return
             tmp = cmds.listRelatives(self.name, type='joint', c=True)
             if tmp:
                self._children = [JointData(j) for j in tmp]
@@ -58,6 +61,8 @@ class JointData:
     @property       
     def parent(self):
         if self._parent is None:
+            if not cmds.objExists(self.name):
+                return
             tmp = cmds.listRelatives(self.name, type='joint', p=True)
             self._parent = JointData(tmp[0]) if tmp else None 
         return self._parent
@@ -155,16 +160,19 @@ class JointData:
         Check if object already exists and update name if it does.
         """
         if cmds.objExists(name):
-            return self._check_exists(name + '_1')
+            return self._check_exists(name + '_dup')
         return name
+
+    def _create_joint(self, j):
+        j.name = self._check_exists(j.name)
+        cmds.select(d=True)
+        cmds.joint(n=j.name, roo=j.index_order, 
+                       a=True, p=j.world_position, 
+                       o=j.orientation)
+        if j.parent:
+            cmds.parent(j.name, j.parent.name, a=True)
 
     def set_joints(self):
         jnts = self.get_all_joints() 
         for j in jnts:
-            cmds.select(d=True)
-            j.name = self._check_exists(j.name)
-            cmds.joint(n=j.name, roo=j.index_order, 
-                       a=True, p=j.world_position, 
-                       o=j.orientation)
-            if j.parent:
-                cmds.parent(j.name, j.parent.name, a=True)
+            self._create_joint(j)
