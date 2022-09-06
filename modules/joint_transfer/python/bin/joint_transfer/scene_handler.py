@@ -2,12 +2,17 @@ from pprint import pprint
 import maya.cmds as cmds
 from .maya_data import scene_data
 import json
+import os 
 
 class SceneHandler:
     
     def __init__(self, file_path, use_selection=False) -> None:
         self.file_path = file_path
         self.use_selection = use_selection
+
+    def _file_exists(self):
+        if not os.path.exists(self.file_path):
+            raise FileNotFoundError(f"{self.file_path} does not exist")
 
     def _read(self):
         with open(self.file_path) as f:
@@ -18,6 +23,7 @@ class SceneHandler:
             json.dump(self.exported_data, f, indent=2)
 
     def import_scene(self):
+        self._file_exists()
         self._read()
         sd = scene_data.SceneData()
         sd.scene_joints = self.imported_data

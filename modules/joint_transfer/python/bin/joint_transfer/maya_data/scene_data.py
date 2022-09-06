@@ -20,7 +20,7 @@ class SceneData:
     def get_top_node(self, node: str, type: str) -> str:
         """
         Cycle through node until the top node is found
-        If not parent is found return passed node.
+        If no parent is found return passed node.
         """
         parent = cmds.listRelatives(node, p=True, typ=type)
         if parent:
